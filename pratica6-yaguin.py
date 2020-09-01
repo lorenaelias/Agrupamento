@@ -11,11 +11,11 @@ def distanciaEuclideana(instancia1, instancia2, dimensao):
         distancia += pow(float(instancia1[x]) - float(instancia2[x]), 2)
     return round(math.sqrt(distancia), 2)
 
-def randomCentroids(dataFrame, K):
+def randomCentroids(X, K):
     randomList = []
-    X = np.array(dataFrame)
+    # X = np.array(dataFrame)
     for i in range (K):
-        n = random.randint(0, len(dataFrame) - 1)
+        n = random.randint(0, len(X) - 1)
         randomList.append(X[n])
 
     return randomList
@@ -83,7 +83,7 @@ def associateToCentroids(originFile, K):
         arqFinal.append(line.strip().split(","))
      
     # Centroides randomicos e as distancias destes com o resto dos objetos
-    centroids = randomCentroids(dataFrame, K)
+    centroids = randomCentroids(X, K)
     gruposDistancias = calculaDistancia(X, centroids)
 
     # Por enquanto, 50 iterações é o limite
