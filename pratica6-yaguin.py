@@ -7,8 +7,8 @@ import collections
 
 def distanciaEuclideana(instancia1, instancia2, dimensao):
     distancia = 0
-    for x in range(dimensao):
-        distancia += pow(instancia1[x] - instancia2[x], 2)
+    for x in range(int(dimensao)):
+        distancia += pow(float(instancia1[x]) - float(instancia2[x]), 2)
     return round(math.sqrt(distancia), 2)
 
 def randomCentroids(dataFrame, K):
@@ -53,9 +53,9 @@ def getNewCentroids(X, group, K):
         for i in range(len(X)):
             if group[i] == k:
                 groupQuantity[k] += 1
-                newCentroids[k] = [a + b for a, b in zip(newCentroids[k], X[i])]
+                newCentroids[k] = [float(a) + float(b) for a, b in zip(newCentroids[k], X[i])]
         if groupQuantity[k] != 0:
-            newCentroids[k] = [a / groupQuantity[k] for a in newCentroids[k]]
+            newCentroids[k] = [float(a) / groupQuantity[k] for a in newCentroids[k]]
 
     roundedNewCentroids = np.around(newCentroids, 2)
 
@@ -70,8 +70,10 @@ def writeToFile(info, destinyFile):
 
 def associateToCentroids(originFile, K):
     dataFrame = pd.read_csv(originFile, encoding = "UTF-8", sep = ",", header = None)
-    X = np.array(dataFrame)
-
+    # X = np.array(dataFrame)
+    X = dataFrame.loc[:, dataFrame.columns != dataFrame.columns[-1]].values   #tirei a ultima coluna, a gente n usa (classe)
+    X = X[1:]   #tirei a primeira linha (header), só atrapalha
+    print(X)
     arq = open(originFile, 'r')
     lines = arq.readlines()
     arq.close()
@@ -92,21 +94,13 @@ def associateToCentroids(originFile, K):
         if np.all( oldCentroids == centroids):  # Se os centroides se mantiverem iguais, então nossa iteração chega ao fim
             break
     
-    
     for z in range(len(X)):
         lastIndex = len(X[z]) - 1
-        arqFinal[z].append(gruposDistancias[z])
-    
-
+        arqFinal[z+1].append(gruposDistancias[z])
     return arqFinal
 
         
 ## TESTES
 
-kMeans = associateToCentroids("iris.data", 3)
-writeToFile(kMeans, "iris2.data")
-
-## NOTAS: Não estou lidando com o caso de ter header, eu acho kk
-
-
-
+kMeans = associateToCentroids("datasets/iris.csv", 3)
+writeToFile(kMeans, "datasets/iris2.csv")
