@@ -23,18 +23,19 @@ def calculaDistancia(X):
     return distancias
 
 def kmeans(X):
-  centroides = []
-  for i in range(5):
-    n = random.randint(0,len(X))
-    centroides.append(X[n])
-  print(centroides)
-  #while():
-   # for i in X:
-    #  dist = calculaDistancia(i,centroides, )
+    centroides = []
+    for i in range(5):
+        n = random.randint(0,len(X))
+        centroides.append([X[n], n])
+    
+    for centroide in centroides:
+        print(centroide)
+    # while():
+    for objeto in X:
+        dist = calculaDistancia(i,centroides, )
 
-df = pd.read_csv("/content/sample_data/iris.csv")
+df = pd.read_csv("datasets/iris.csv")
 X = df.loc[:, df.columns != df.columns[-1]].values
 y = df.loc[:, df.columns[-1]].values
-print(len(X))
+# print(len(X))
 result = kmeans(X)
-

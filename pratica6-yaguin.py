@@ -7,13 +7,13 @@ import collections
 
 def distanciaEuclideana(instancia1, instancia2, dimensao):
     distancia = 0
-    for x in range(int(dimensao)):
+    for x in range(dimensao):
         distancia += pow(float(instancia1[x]) - float(instancia2[x]), 2)
     return round(math.sqrt(distancia), 2)
 
 def randomCentroids(X, K):
     randomList = []
-    # X = np.array(dataFrame)
+
     for i in range (K):
         n = random.randint(0, len(X) - 1)
         randomList.append(X[n])
@@ -38,7 +38,6 @@ def calculaDistancia(X, centroids):
 
     return group
 
-# Group aqui é a lista que contém os 0, 1, 2, ou seja, a lista de grupos para que eu possa usar seus index na soma
 def getNewCentroids(X, group, K):
     groupQuantity = []
     newCentroids = []
@@ -67,13 +66,12 @@ def writeToFile(info, destinyFile):
         arq = csv.writer(csvfile, delimiter=",")
         for i in info:
             arq.writerow(i)
+    print('Arquivo escrito. Verifique.')
 
 def associateToCentroids(originFile, K):
     dataFrame = pd.read_csv(originFile, encoding = "UTF-8", sep = ",", header = None)
-    # X = np.array(dataFrame)
-    X = dataFrame.loc[:, dataFrame.columns != dataFrame.columns[-1]].values   #tirei a ultima coluna, a gente n usa (classe)
-    X = X[1:]   #tirei a primeira linha (header), só atrapalha
-    print(X)
+    X = dataFrame.loc[:, dataFrame.columns != dataFrame.columns[-1]].values
+    X = X[1:]
     arq = open(originFile, 'r')
     lines = arq.readlines()
     arq.close()
@@ -82,25 +80,41 @@ def associateToCentroids(originFile, K):
     for line in lines: 
         arqFinal.append(line.strip().split(","))
      
-    # Centroides randomicos e as distancias destes com o resto dos objetos
     centroids = randomCentroids(X, K)
     gruposDistancias = calculaDistancia(X, centroids)
 
-    # Por enquanto, 50 iterações é o limite
-    for i in range(50):
+    centrBool = [True] * K
+    areAllEqual = False
+
+    for i in range(100):
         oldCentroids = centroids
         centroids = getNewCentroids(X, gruposDistancias, K)
         gruposDistancias = calculaDistancia(X, centroids)
-        if np.all( oldCentroids == centroids):  # Se os centroides se mantiverem iguais, então nossa iteração chega ao fim
+        for k in range(K):
+            if oldCentroids[k] in centroids:
+                centrBool[k] = True
+            else:
+                centrBool[k] = False
+        areAllEqual = all(elem == centrBool[0] for elem in centrBool)
+        if centrBool[0] == True & areAllEqual == True:
             break
+    
     
     for z in range(len(X)):
         lastIndex = len(X[z]) - 1
         arqFinal[z+1].append(gruposDistancias[z])
+
     return arqFinal
 
         
 ## TESTES
+print('IMPLEMENTACAO K-MEANS\n')
+print("---------------------------------------------------------------------------")
+arquivoorig = input('Dataset Original (arquivo.csv): ')
+arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
+K = input('K: ')
+print("---------------------------------------------------------------------------")
 
-kMeans = associateToCentroids("datasets/iris.csv", 3)
-writeToFile(kMeans, "datasets/iris2.csv")
+
+kMeans = associateToCentroids(arquivoorig, int(K))
+writeToFile(kMeans, arquivodest)
