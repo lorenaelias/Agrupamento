@@ -93,7 +93,7 @@ def mergeLinhas(distancias, pos):
 
     print(novaLinha, novaPosLinha)
 
-    #TODO: deletar as linhas e colunas pos[0] pos[1]
+    #deletar as linhas e colunas pos[0] pos[1]
     
     for i in range(len(distancias)):
         if(len(distancias[i]) > pos[1]):
@@ -109,7 +109,7 @@ def mergeLinhas(distancias, pos):
     del distancias[pos[1]]
     del distancias[pos[0]]
 
-    #TODO: inserir linha na novaPosLinha a novaLinha 
+    #inserir linha na novaPosLinha a novaLinha 
     distancias.insert(novaPosLinha, novaLinha)
 
     #TODO: inserir coluna na novaPosLinha a coluna novaColuna
