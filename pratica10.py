@@ -91,15 +91,38 @@ def mergeLinhas(distancias, pos):
     else:
         novaPosLinha = len(novaLinha)
 
-    print(novaLinha, novaPosLinha)
+    # print(novaLinha, novaPosLinha)
+
+    #calcular novaColuna
+    novaColuna = []
+    valorPos0 = 0
+    valorPos1 = 0
+    for i in range(len(distancias)):
+        if(len(distancias[i]) > pos[0]):
+            # print('pos0')
+            # print(distancias[i][pos[0]])
+            valorPos0 = distancias[i][pos[0]]
+            
+        if(len(distancias[i]) > pos[1]):
+            # print('pos1')
+            # print(distancias[i][pos[1]])
+            valorPos1 = distancias[i][pos[1]]
+
+        if(valorPos1 < valorPos0):
+            minColuna = valorPos1
+        else:
+            minColuna = valorPos0
+        novaColuna.append(minColuna)
+    
+    # print(novaColuna)
 
     #deletar as linhas e colunas pos[0] pos[1]
     
     for i in range(len(distancias)):
         if(len(distancias[i]) > pos[1]):
-            print(pos[1])
-            print(distancias[i])
-            print(len(distancias[i]))
+            # print(pos[1])
+            # print(distancias[i])
+            # print(len(distancias[i]))
             del distancias[i][pos[1]]
     
     for i in range(len(distancias)):
@@ -112,14 +135,46 @@ def mergeLinhas(distancias, pos):
     #inserir linha na novaPosLinha a novaLinha 
     distancias.insert(novaPosLinha, novaLinha)
 
-    #TODO: inserir coluna na novaPosLinha a coluna novaColuna
+    del novaColuna[0]
 
-    print(distancias)
+    for i in range(len(distancias)):
+        distancias[i].insert(novaPosLinha, novaColuna[i])
+
+    #inserir coluna novaColuna na posicao novaPosLinha
+    # print(distancias)
+
+    for i in range(len(distancias)):
+        if distancias[i][-1] == 0:
+            del distancias[i][-1]
+
+    # print(distancias)
 
     return distancias
 
+def iterarMatriz(distancias):
+    #parada quando tivermos matriz 2x2 ( len(distancias) == 2 )
+    tamanho = len(distancias)
+    if(tamanho <= 2):
+        raise Exception("Tamanho nao suportado")
 
-#parada quando tivermos matriz 2x2 ( len(distancias) == 2 )
+    distanciasEscrita = []
+    distanciasEscrita.append(str(distancias))
+    print(distanciasEscrita)
+
+    while(tamanho != 2):
+        posMin = minDistancia(distancias)
+        novasDistancias = []
+        novasDistancias = mergeLinhas(distancias, posMin)
+        # print(novasDistancias)
+        distanciasEscrita.append(str(novasDistancias)) 
+        
+        tamanho = tamanho - 1
+
+    # TODO: problema - distancias e novasDistancias sao tratados como objetos
+    #         e objetos em python sao tratados como ponteiros
+    #       fiz um casting pra str, mas ai da problema na hora de gravar no arquivo
+    print(distanciasEscrita)
+    writeToFile(distanciasEscrita, "hierarquia.txt")
 
 def writeToFile(info, fileName):
     with open(fileName, 'w', newline='') as csvfile:
@@ -168,9 +223,5 @@ if __name__ == "__main__":
     # [],		
     # [5]
     # ]
-
-    posMin = minDistancia(distancias)
-    print(posMin)
-    novasDistancias = mergeLinhas(distancias, posMin)
-
-    # writeToFile(distancias, arquivodest)
+    
+    iterarMatriz(distancias)
