@@ -63,7 +63,6 @@ def SingleLink(L):
                 Novas_pos[0].append(i)
         else: 
             Novas_pos.append(i)
-    print("Novas_pos",Novas_pos)
     #Fazer nova matriz
     Nova_matriz = []
 
@@ -88,37 +87,22 @@ def SingleLink(L):
                     ny = a
 
             #Fazer a nova matriz
-            print("Lista normal:",L[x][y])
-            print("POS_X",pos_x)
-            print("POS_Y",pos_y)
-            print("NX:",nx)
-            print("NY:",ny)
-            print("X",x)
-            print("Y",y)
             if(nx != 0):
-                print(Nova_matriz[nx])
                 if(Nova_matriz[nx][ny] == -1):
                     Nova_matriz[nx][ny] = L[x][y]
                 else: 
                     if(Nova_matriz[nx][ny] > L[x][y]):
                         Nova_matriz[nx][ny] = L[x][y]
-                print(Nova_matriz[nx])
             else:
-                print(Nova_matriz[ny])
                 if(Nova_matriz[ny][nx] == -1):
                     Nova_matriz[ny][nx] = L[x][y]
                 else: 
                     if(Nova_matriz[ny][nx] > L[x][y]):
                         Nova_matriz[ny][nx] = L[x][y]
-                print(Nova_matriz[ny])
 
     for i in Nova_matriz:
         i.pop()
-
-    print(Nova_matriz)
-    if len(Nova_matriz ) == 2:
-        return Nova_matriz
-    SingleLink(Nova_matriz)
+    return Nova_matriz
     
 
 def writeToFile(info, fileName):
@@ -130,15 +114,23 @@ def writeToFile(info, fileName):
         
 #print("---------------------------------------------------------------------------")
 #arquivoorig = input('Dataset Original (arquivo.csv): ')
-#arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
-#print("---------------------------------------------------------------------------")
+arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
+print("---------------------------------------------------------------------------")
 #df = pd.read_csv(arquivoorig)
 
 #X = df.loc[:, df.columns != df.columns[-1]].values
 #y = df.loc[:, df.columns[-1]].values
 
 distancias = [[],[2],[6,5],[10,8,4],[9,8,5,3]]
-
+final = []
+final.append(distancias)
 #distancias = calculaDistancia(X)
 result = SingleLink(distancias)
+final.append(result)
 #writeToFile(result, arquivodest)
+
+while (len(result) > 2 ):
+    result = SingleLink(result)
+    final.append(result)
+#print(final)
+writeToFile(final, arquivodest)
