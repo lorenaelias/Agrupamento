@@ -69,7 +69,6 @@ def SingleLink(L):
     for i in range(len(Novas_pos)):
         Nova_matriz.append([-1] *(i+1))
 
-    print(len(L))
     for x in range(0,((len(L)))):
         for y in range(0,len(L[x])):
             if(((x == pos_x or x == pos_y) and (y == pos_x or y == pos_y)) or x == y):
@@ -112,25 +111,22 @@ def writeToFile(info, fileName):
             arq.writerow(i)
     print("Arquivo escrito.")
         
-#print("---------------------------------------------------------------------------")
-#arquivoorig = input('Dataset Original (arquivo.csv): ')
+print("---------------------------------------------------------------------------")
+arquivoorig = input('Dataset Original (arquivo.csv): ')
 arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
 print("---------------------------------------------------------------------------")
-#df = pd.read_csv(arquivoorig)
+df = pd.read_csv(arquivoorig)
 
-#X = df.loc[:, df.columns != df.columns[-1]].values
-#y = df.loc[:, df.columns[-1]].values
+X = df.loc[:, df.columns != df.columns[-1]].values
+y = df.loc[:, df.columns[-1]].values
 
-distancias = [[],[2],[6,5],[10,8,4],[9,8,5,3]]
 final = []
+distancias = calculaDistancia(X)
 final.append(distancias)
-#distancias = calculaDistancia(X)
 result = SingleLink(distancias)
 final.append(result)
-#writeToFile(result, arquivodest)
 
 while (len(result) > 2 ):
     result = SingleLink(result)
     final.append(result)
-#print(final)
 writeToFile(final, arquivodest)
