@@ -18,6 +18,7 @@
 import pandas as pd
 import math
 import csv
+import ast
 
 def distanciaEuclideana(instancia1, instancia2, dimensao):
     distancia = 0
@@ -180,7 +181,9 @@ def writeToFile(info, fileName):
     with open(fileName, 'w', newline='') as csvfile:
         arq = csv.writer(csvfile)
         for i in info:
-            arq.writerow(i)
+            res = ast.literal_eval(i) 
+            
+            arq.writerow(res)
     print("Arquivo escrito.")
     
 if __name__ == "__main__":
@@ -191,20 +194,20 @@ if __name__ == "__main__":
     # df = pd.read_csv(arquivoorig)
 
     df = pd.read_csv("datasets/iris.csv")
-    arquivodest = "iris-triang.txt"
+    arquivodest = "hierarquia.txt"
     X = df.loc[:, df.columns != df.columns[-1]].values
     y = df.loc[:, df.columns[-1]].values
 
-    # distancias = calculaDistancia(X)
+    distancias = calculaDistancia(X)
 
     #teste do exercicio1 pratica9
-    distancias = [    
-    [],
-    [2],		
-    [6, 5],	
-    [10, 8, 4],
-    [9,	8, 5, 3]
-    ]
+    # distancias = [    
+    # [],
+    # [2],		
+    # [6, 5],	
+    # [10, 8, 4],
+    # [9, 8, 5, 3]
+    # ]
 
     # distancias = [    
     # [],		
