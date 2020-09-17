@@ -1,19 +1,5 @@
 #IMPLEMENTACAO SINGLE LINK
 #medida de dist: euclideana
-#condicao de parada: um unico grupo seja obtido
-
-#remover classe da base de dados (ultima coluna)
-
-#entrada: arquivo .csv
-#saida: 
-        #uma abordagem possivel:
-        # arquivo indicando em cada nivel de hierarquia qual par de elementos foi unido,
-        # o nivel é representado pela posicao no arquivo. Cada linha deve corresponder a um nivel.
-
-        #outra abordagem possivel:
-        # indicar em cada nivel de hieraquia qual foi o resultado do agrupamento. Cada linha do arquivo
-        # indica um nivel da hierarquia. Os grupos são separados por virgula, sendo cada grupo
-        # representado por {} e seus elementos separados por virgula também.
 
 import pandas as pd
 import math
@@ -111,22 +97,22 @@ def writeToFile(info, fileName):
             arq.writerow(i)
     print("Arquivo escrito.")
         
-print("---------------------------------------------------------------------------")
-arquivoorig = input('Dataset Original (arquivo.csv): ')
-arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
-print("---------------------------------------------------------------------------")
-df = pd.read_csv(arquivoorig)
+if __name__ == "__main__":
+    print("---------------------------------------------------------------------------")
+    arquivoorig = input('Dataset Original (arquivo.csv): ')
+    arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
+    print("---------------------------------------------------------------------------")
+    df = pd.read_csv(arquivoorig)
 
-X = df.loc[:, df.columns != df.columns[-1]].values
-y = df.loc[:, df.columns[-1]].values
+    X = df.loc[:, df.columns != df.columns[-1]].values
 
-final = []
-distancias = calculaDistancia(X)
-final.append(distancias)
-result = SingleLink(distancias)
-final.append(result)
-
-while (len(result) > 2 ):
-    result = SingleLink(result)
+    final = []
+    distancias = calculaDistancia(X)
+    final.append(distancias)
+    result = SingleLink(distancias)
     final.append(result)
-writeToFile(final, arquivodest)
+
+    while (len(result) > 2 ):
+        result = SingleLink(result)
+        final.append(result)
+    writeToFile(final, arquivodest)
