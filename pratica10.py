@@ -30,12 +30,33 @@ def calculaDistancia(X):
     distancia = []
     for x in range(len(X)):
         for y in range(len(X)):
+            if(x == y):
+                break
             dimensao = len(X[x])
             dist = distanciaEuclideana(X[x], X[y], dimensao)
             distancia.append(dist)
         distancias.append(distancia)
         distancia = []
     return distancias
+
+def minDistancia(distancias):
+    # print ("zero:", distancias[1])
+    minus = distancias[1][0]
+    
+    for i in range(2, len(distancias)):
+        aux = distancias[i].index(min(distancias[i]))
+        # print(aux)
+        if(distancias[i][aux] < minus):
+            minus = distancias[i][aux]
+            pos = [i, aux]
+    # print(distancias[pos[0]][pos[1]])
+    # print(pos)
+    return pos
+
+def mergeLinhas(distancias, pos):
+    novaDistancias = distancias
+
+    return novaDistancias
 
 def writeToFile(info, fileName):
     with open(fileName, 'w', newline='') as csvfile:
@@ -44,14 +65,18 @@ def writeToFile(info, fileName):
             arq.writerow(i)
     print("Arquivo escrito.")
     
-print("---------------------------------------------------------------------------")
-arquivoorig = input('Dataset Original (arquivo.csv): ')
-arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
-print("---------------------------------------------------------------------------")
-df = pd.read_csv(arquivoorig)
+# print("---------------------------------------------------------------------------")
+# arquivoorig = input('Dataset Original (arquivo.csv): ')
+# arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
+# print("---------------------------------------------------------------------------")
+# df = pd.read_csv(arquivoorig)
 
+df = pd.read_csv("datasets/iris.csv")
+arquivodest = "iris-triang.txt"
 X = df.loc[:, df.columns != df.columns[-1]].values
 y = df.loc[:, df.columns[-1]].values
 
 distancias = calculaDistancia(X)
+posMin = minDistancia(distancias)
+
 writeToFile(distancias, arquivodest)
