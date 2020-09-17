@@ -26,6 +26,7 @@ def distanciaEuclideana(instancia1, instancia2, dimensao):
     return round(math.sqrt(distancia), 4)
 
 def calculaDistancia(X):
+    #retorna a matriz de distancias (somente a parte triangular inferior)
     distancias = []
     distancia = []
     for x in range(len(X)):
@@ -40,6 +41,8 @@ def calculaDistancia(X):
     return distancias
 
 def minDistancia(distancias):
+    #retorna a posicao da menor distancia na matriz distancias
+
     # print ("zero:", distancias[1])
     minus = distancias[1][0]
     pos = [1, 0]
@@ -55,8 +58,14 @@ def minDistancia(distancias):
     return pos
 
 def mergeLinhas(distancias, pos):
+    # - distancias é a matriz de distancias
+    # - pos é uma lista de dois elementos que contem a posicao dos objetos 
+    #   que possuem menor distancia entre si
+    # 
+    # retorna a matriz de distancias depois de fundir as linhas e colunas
+    # dos objetos que estao nas posicoes pos
+
     novaLinha = []
-    novaDistancias = distancias
     if(pos[0] > pos[1]):
         aux = pos[0]
         pos[0] = pos[1]
@@ -85,9 +94,29 @@ def mergeLinhas(distancias, pos):
     print(novaLinha, novaPosLinha)
 
     #TODO: deletar as linhas e colunas pos[0] pos[1]
-    #TODO: inserir na posicao novaPosLinha a novaLinha 
+    
+    for i in range(len(distancias)):
+        if(len(distancias[i]) > pos[1]):
+            print(pos[1])
+            print(distancias[i])
+            print(len(distancias[i]))
+            del distancias[i][pos[1]]
+    
+    for i in range(len(distancias)):
+        if(len(distancias[i]) > pos[0]):
+            del distancias[i][pos[0]]
 
-    return novaDistancias
+    del distancias[pos[1]]
+    del distancias[pos[0]]
+
+    #TODO: inserir linha na novaPosLinha a novaLinha 
+    distancias.insert(novaPosLinha, novaLinha)
+
+    #TODO: inserir coluna na novaPosLinha a coluna novaColuna
+
+    print(distancias)
+
+    return distancias
 
 
 #parada quando tivermos matriz 2x2 ( len(distancias) == 2 )
@@ -113,14 +142,6 @@ if __name__ == "__main__":
 
     # distancias = calculaDistancia(X)
 
-    # teste que eu fiz na lousa
-    # distancias = [
-    #     [],
-    #     [0.2],
-    #     [0.3, 0.4],
-    #     [0.5, 0.1, 0.6]
-    # ]
-
     #teste do exercicio1 pratica9
     distancias = [    
     [],
@@ -130,23 +151,23 @@ if __name__ == "__main__":
     [9,	8, 5, 3]
     ]
 
-    distancias = [    
-    [],		
-    [5],	
-    [8, 4],
-    [8, 5, 3]
-    ]
+    # distancias = [    
+    # [],		
+    # [5],	
+    # [8, 4],
+    # [8, 5, 3]
+    # ]
 
-    distancias = [    
-    [],		
-    [5],	
-    [8, 4]
-    ]
+    # distancias = [    
+    # [],		
+    # [5],	
+    # [8, 4]
+    # ]
 
-    distancias = [    
-    [],		
-    [5]
-    ]
+    # distancias = [    
+    # [],		
+    # [5]
+    # ]
 
     posMin = minDistancia(distancias)
     print(posMin)
