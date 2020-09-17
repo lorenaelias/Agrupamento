@@ -42,6 +42,7 @@ def calculaDistancia(X):
 def minDistancia(distancias):
     # print ("zero:", distancias[1])
     minus = distancias[1][0]
+    pos = [1, 0]
     
     for i in range(2, len(distancias)):
         aux = distancias[i].index(min(distancias[i]))
@@ -54,9 +55,42 @@ def minDistancia(distancias):
     return pos
 
 def mergeLinhas(distancias, pos):
+    novaLinha = []
     novaDistancias = distancias
+    if(pos[0] > pos[1]):
+        aux = pos[0]
+        pos[0] = pos[1]
+        pos[1] = aux
+
+    for i in range(len(distancias[pos[0]])):
+        if( pos[0] == i ):
+            min = distancias[i][pos[0]]
+            pos = [i, pos[0]]
+            continue
+        else:
+            min = distancias[pos[0]][i]
+        if( pos[1] == i ):
+            continue
+        if( distancias[pos[1]][i] < distancias[pos[0]][i] ):
+            min = distancias[pos[1]][i]
+            pos = [pos[1], i]
+        novaLinha.append(min)
+    if( len(novaLinha) == 0 ):
+        novaPosLinha = 0
+    elif( novaLinha[-1] == 0 ):
+        novaLinha = novaLinha[:-2]
+    else:
+        novaPosLinha = len(novaLinha)
+
+    print(novaLinha, novaPosLinha)
+
+    #TODO: deletar as linhas e colunas pos[0] pos[1]
+    #TODO: inserir na posicao novaPosLinha a novaLinha 
 
     return novaDistancias
+
+
+#parada quando tivermos matriz 2x2 ( len(distancias) == 2 )
 
 def writeToFile(info, fileName):
     with open(fileName, 'w', newline='') as csvfile:
@@ -65,18 +99,57 @@ def writeToFile(info, fileName):
             arq.writerow(i)
     print("Arquivo escrito.")
     
-# print("---------------------------------------------------------------------------")
-# arquivoorig = input('Dataset Original (arquivo.csv): ')
-# arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
-# print("---------------------------------------------------------------------------")
-# df = pd.read_csv(arquivoorig)
+if __name__ == "__main__":
+    # print("---------------------------------------------------------------------------")
+    # arquivoorig = input('Dataset Original (arquivo.csv): ')
+    # arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
+    # print("---------------------------------------------------------------------------")
+    # df = pd.read_csv(arquivoorig)
 
-df = pd.read_csv("datasets/iris.csv")
-arquivodest = "iris-triang.txt"
-X = df.loc[:, df.columns != df.columns[-1]].values
-y = df.loc[:, df.columns[-1]].values
+    df = pd.read_csv("datasets/iris.csv")
+    arquivodest = "iris-triang.txt"
+    X = df.loc[:, df.columns != df.columns[-1]].values
+    y = df.loc[:, df.columns[-1]].values
 
-distancias = calculaDistancia(X)
-posMin = minDistancia(distancias)
+    # distancias = calculaDistancia(X)
 
-writeToFile(distancias, arquivodest)
+    # teste que eu fiz na lousa
+    # distancias = [
+    #     [],
+    #     [0.2],
+    #     [0.3, 0.4],
+    #     [0.5, 0.1, 0.6]
+    # ]
+
+    #teste do exercicio1 pratica9
+    distancias = [    
+    [],
+    [2],		
+    [6, 5],	
+    [10, 8, 4],
+    [9,	8, 5, 3]
+    ]
+
+    distancias = [    
+    [],		
+    [5],	
+    [8, 4],
+    [8, 5, 3]
+    ]
+
+    distancias = [    
+    [],		
+    [5],	
+    [8, 4]
+    ]
+
+    distancias = [    
+    [],		
+    [5]
+    ]
+
+    posMin = minDistancia(distancias)
+    print(posMin)
+    novasDistancias = mergeLinhas(distancias, posMin)
+
+    # writeToFile(distancias, arquivodest)
