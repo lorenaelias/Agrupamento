@@ -133,7 +133,7 @@ def mergeLinhas(distancias, pos):
     del distancias[pos[1]]
     del distancias[pos[0]]
 
-    #inserir linha na novaPosLinha a novaLinha 
+    #inserir linha na novaPosLinha a novaLinha
     distancias.insert(novaPosLinha, novaLinha)
 
     del novaColuna[0]
@@ -201,13 +201,13 @@ if __name__ == "__main__":
     distancias = calculaDistancia(X)
 
     #teste do exercicio1 pratica9
-    # distancias = [    
-    # [],
-    # [2],		
-    # [6, 5],	
-    # [10, 8, 4],
-    # [9, 8, 5, 3]
-    # ]
+    distancias = [    
+    [],
+    [2],		
+    [6, 5],	
+    [10, 8, 4],
+    [9, 8, 5, 3]
+    ]
 
     # distancias = [    
     # [],		
@@ -225,6 +225,16 @@ if __name__ == "__main__":
     # distancias = [    
     # [],		
     # [5]
+    # ]
+
+    #exemplo da indiana 1
+    # distancias = [
+    #     [],
+    #     [23],
+    #     [22, 15],
+    #     [37, 20, 15],
+    #     [34, 14, 28, 29],
+    #     [23, 25, 11, 22, 39]
     # ]
     
     iterarMatriz(distancias)
