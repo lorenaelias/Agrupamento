@@ -2,15 +2,9 @@ import pandas as pd
 import random
 import math
 import csv
-import numpy as np
 import collections
-
-def isNumeric(atributo):
-    try:
-        float(atributo)
-        return True
-    except ValueError:
-        return False
+import numpy as np
+import os
 
 def distanciaEuclideana(instancia1, instancia2, dimensao):
     distancia = 0
@@ -66,14 +60,6 @@ def getNewCentroids(X, group, K):
     roundedNewCentroids = np.around(newCentroids, 2)
 
     return roundedNewCentroids
-
-def writeToFile(info, destinyFile):
-
-    with open(destinyFile, 'w', newline='') as csvfile:
-        arq = csv.writer(csvfile, delimiter=",")
-        for i in info:
-            arq.writerow(i)
-    print('Arquivo escrito. Verifique.')
 
 def associateToCentroids(originFile, K):
     dataFrame = pd.read_csv(originFile, encoding = "UTF-8", sep = ",", header = None)
@@ -141,6 +127,7 @@ def evaluatePurity(originFile, arquivodest, K):
     N = 0
     M = 0
 
+    print(f"\n----Aqui está nossa matriz de confusão para K = {K}----\n")
     for i in confusionMatrix:
         print(i)
 
@@ -149,21 +136,29 @@ def evaluatePurity(originFile, arquivodest, K):
         M += max(confusionMatrix[i])
 
     purity = M / N
+    response = f"Pureza com K = {K}: {purity}\n"
 
-    return purity
+    writeToFile(response, arquivodest)
 
+def writeToFile(info, arquivodest):
 
-## percorre matriz, quando achar um igual no switch adiciona 
+    if os.path.exists(arquivodest):
+        mtdEscrita = 'a' # append if already exists
+    else:
+        mtdEscrita = 'w' # make a new file if not
+
+    arq = open(arquivodest, mtdEscrita)
+
+    arq.write(info)
+    arq.close()
             
-
 ## TESTES
-print('ANÁLISE DE PUREZA DE UM CLUSTER K-MEANS\n')
+print('\nANÁLISE DE PUREZA DE UM CLUSTER K-MEANS PARA -->> K = 2  K = 3   K = 4\n')
 print("---------------------------------------------------------------------------")
 arquivoorig = input('Dataset Original (arquivo.csv): ')
 arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
-K = input('K: ')
 print("---------------------------------------------------------------------------\n")
 
-
-purity = evaluatePurity(arquivoorig, arquivodest, int(K))
-print("THE PURITY OF THIS SHIT IS -->>", purity)
+evaluatePurity(arquivoorig, arquivodest, 2)
+evaluatePurity(arquivoorig, arquivodest, 3)
+evaluatePurity(arquivoorig, arquivodest, 4)
