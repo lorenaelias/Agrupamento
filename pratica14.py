@@ -113,41 +113,57 @@ def associateToCentroids(originFile, K):
 
     return arqFinal
 
-def evaluatePurity(originFile, arquivodest, K):
+def generateConfusionMatrix(originFile, K):
     arqEvaluate = associateToCentroids(originFile, K)
+    classPos = len(arqEvaluate[1]) - 2                  ## posição da classe em cada objeto
+    clusterPos = len(arqEvaluate[1]) - 1                ## posição da designação de clusters após o K-Means
+    classes = []
+
+    for i in range(len(arqEvaluate) - 1):
+        classes.append(arqEvaluate[i+1][classPos])
+
+    classes = list(set(classes))
+    confusionMatrix = [[0 for j in range(len(classes))] for i in range(K)]     ## inicializei a matriz de confusão com as linhas e colunas vazias
+
+    for i in range(len(arqEvaluate) - 1):
+
+        for k in range(K):
+
+            if (arqEvaluate[i+1][clusterPos] == k): 
+                for j in range(len(classes)):
+                    if (arqEvaluate[i+1][classPos] == classes[j]):
+                        confusionMatrix[k][j] += 1
+    
+    return confusionMatrix
+
+def evaluatePurity(originFile, arquivodest, K):
+    confusionMatrix = generateConfusionMatrix(originFile, K)
     N = 0
     M = 0
 
-    for i in range(len(arqEvaluate) - 1):
-        biggest = 0
-        tempList = []
-        for j in range(len(arqEvaluate[i+1])):
+    for i in confusionMatrix:
+        print(i)
 
-            if (isNumeric(arqEvaluate[i+1][j])):
-                num = float(arqEvaluate[i+1][j])
-                tempList.append(num)
-        
-        tempList.sort()
-        biggest = tempList[-1]
-        N += sum(tempList)
-        M += biggest
+    for i in range(len(confusionMatrix)):
+        N += sum(confusionMatrix[i])
+        M += max(confusionMatrix[i])
 
-    purity = M / N 
-    #print ("The evaluation of the purity here is: ", purity)
-    writeToFile(arqEvaluate, arquivodest)
+    purity = M / N
+
     return purity
 
-        
+
+## percorre matriz, quando achar um igual no switch adiciona 
+            
+
 ## TESTES
-print('IMPLEMENTACAO K-MEANS\n')
+print('ANÁLISE DE PUREZA DE UM CLUSTER K-MEANS\n')
 print("---------------------------------------------------------------------------")
 arquivoorig = input('Dataset Original (arquivo.csv): ')
 arquivodest = input('Arquivo de Destino (arquivo-destino.txt): ')
 K = input('K: ')
-print("---------------------------------------------------------------------------")
+print("---------------------------------------------------------------------------\n")
+
 
 purity = evaluatePurity(arquivoorig, arquivodest, int(K))
 print("THE PURITY OF THIS SHIT IS -->>", purity)
-
-#kMeans = associateToCentroids(arquivoorig, int(K))
-# writeToFile(kMeans, arquivodest)
