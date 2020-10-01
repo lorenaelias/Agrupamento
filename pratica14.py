@@ -146,7 +146,7 @@ def writeToFile(info, arquivodest):
         mtdEscrita = 'a' # append if already exists
     else:
         mtdEscrita = 'w' # make a new file if not
-
+        
     arq = open(arquivodest, mtdEscrita)
 
     arq.write(info)

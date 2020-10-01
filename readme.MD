@@ -3,8 +3,8 @@
     - Biblioteca Pandas instalada
 
 *Para executar*
-    - (windows): `python pratica10.py`
-    - (linux): `python3 pratica10.py`
+    - (windows): `python pratica14.py`
+    - (linux): `python3 pratica14.py`
 
 *Em execução*
     - O programa pedirá o caminho do dataset que deverá ser imputado incluindo a extensão, ex.:
@@ -16,11 +16,11 @@
     - O programa pedirá o caminho do arquivo de destino que deverá ser imputado incluindo a extensão, ex.:
 
         ```
-        Arquivo de Destino (dataset-destino.txt): resultado/hierarquia.txt
+        Arquivo de Destino (dataset-destino.txt): resultado/purezas.txt
         ```
     - Saída:
-        Um arquivo em que cada linha representa uma iteração do código de agrupamento single link.
+        Um arquivo onde cada linha representa a pureza de uma clusterização K-Means com seu respectivo valor K
 
 *Observações*
     - O arquivo de entrada deverá estar em formato .csv
-    - Recomendamos que o arquivo de saída seja de formato .txt
+    - O arquivo de saída deve ser no formato .txt
