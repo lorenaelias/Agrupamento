@@ -55,10 +55,11 @@ def sil(obj,clusterPertencente,centroides):
     si = si/ distanciaObjetoAtéCentroide
   return si
 
-def main():
-    df = pd.read_csv('iris.data')
+if __name__ == "__main__":
+    df = pd.read_csv('datasets/iris.csv')
     print(df.head())
-    X = df.loc[:,df.columns != "Iris-setosa"].values
+    X = df.loc[:,df.columns != "variety"].values
+    print("Dataset")
     print(X)
     kmeans = KMeans(n_clusters= 3, random_state=0).fit(X)
     centroides = kmeans.cluster_centers_
@@ -67,4 +68,4 @@ def main():
     cluster = kmeans.labels_
     print(cluster)
     result = silhueta_simplificada(X,cluster,centroides)
-    print(result)
+    print("result: ",result)
